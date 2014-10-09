@@ -38,41 +38,42 @@ echo " * Installing packages including rabbitmq-server and mysql-server..."
 sudo apt-get --quiet update
 sudo apt-get --quiet --assume-yes install \
  python-setuptools \
- python-eventlet \
- python-greenlet \
- python-httplib2 \
- python-iso8601 \
- python-lxml \
- python-sqlalchemy \
- python-paste \
- python-routes \
- python-webob \
- python-yaml \
- python-mysqldb \
  python-dev \
- python-pip \
+ python-mysqldb \
  git-core \
- python-setuptools \
  gcc \
  libc6-dev \
  libxml2-dev \
  libxslt-dev \
  libz-dev \
- python-prettytable \
  mysql-server \
- rabbitmq-server
+ rabbitmq-server \
+ libpq-dev 
+sleep 3
+sudo easy_install pip 
+sleep 3
+sudo pip install  \
+ eventlet \
+ greenlet \
+ httplib2 \
+ iso8601 \
+ lxml \
+ sqlalchemy \
+ paste \
+ routes \
+ webob 
 
 echo " * Updating rabbitmq password..."
 sudo rabbitmqctl change_password guest "${RABBITMQ_PASSWORD}"
 
 echo " * Downloading heat..."
-if [ -d heat/.git ] ; then
-  pushd heat
-  git stash
-  git pull
-  popd
+if [ -e heat ] ; then
+  echo "Heat Downloaded... "
 else
-  git clone --quiet git://github.com/openstack/heat.git
+  wget https://github.com/openstack/heat/archive/2014.1.b3.tar.gz
+  tar -xvf 2014.1.b3.tar.gz
+  cp -r heat-2014.1.b3 heat
+  rm -rf heat-2014.1.b3
 fi
 cd heat
 echo " * Installing additional python dependencies..."
