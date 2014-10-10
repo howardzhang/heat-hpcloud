@@ -70,7 +70,7 @@ echo " * Downloading heat..."
 if [ -e heat ] ; then
   echo "Heat Downloaded... "
 else
-  wget https://github.com/openstack/heat/archive/2014.1.b3.tar.gz
+  #wget https://github.com/openstack/heat/archive/2014.1.b3.tar.gz
   tar -xvf 2014.1.b3.tar.gz
   cp -r heat-2014.1.b3 heat
   rm -rf heat-2014.1.b3
