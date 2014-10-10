@@ -87,19 +87,17 @@ sudo python setup.py develop --quiet
 sudo pip install --quiet python-heatclient
 
 echo " * Patching heat to run against HP Cloud..."
-git apply << EOF
-diff --git a/contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py b/contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py
-index 28de5d9..8382f14 100644
---- a/contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py
-+++ b/contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py
-@@ -195,6 +195,8 @@ class KeystoneClientV2(object):
-         self.client.users.update_enabled(user_id, True)
- 
+patch contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py << EOF
+--- contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py     2014-10-10 03:01:28.105955508 +0000
++++ contrib/heat_keystoneclient_v2/heat_keystoneclient_v2/client.py     2014-10-09 14:49:23.222182965 +0000
+@@ -196,6 +196,8 @@ class KeystoneClientV2(object):
+         self.client_v2.users.update_enabled(user_id, True)
+
      def url_for(self, **kwargs):
 +        default_region_name = cfg.CONF.region_name_for_services
 +        kwargs.setdefault('region_name', default_region_name)
-         return self.client.service_catalog.url_for(**kwargs)
- 
+         return self.client_v2.service_catalog.url_for(**kwargs)
+
      @property
 EOF
 
